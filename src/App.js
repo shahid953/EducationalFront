@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -14,17 +14,18 @@ import LiveClasses from './student/LiveClasses';
 import QuizTest from './student/QuizTest';
 import GroupChat from './pages/GroupChat';
 
+function AppContent() {
+  const location = useLocation();
+  const hideFooterRoutes = ['/login', '/signup'];
+  const shouldHideFooter = hideFooterRoutes.includes(location.pathname);
 
-
-function App() {
   return (
-    <BrowserRouter>
+    <>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />   {/* ✅ Add this */}
-          <Route path="/contact" element={<Contact />} /> 
-        
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<StudentHome />} />
@@ -33,10 +34,17 @@ function App() {
         <Route path="/student/live" element={<LiveClasses />} />
         <Route path="/student/quiz" element={<QuizTest />} />
         <Route path="/group-chat" element={<GroupChat />} />
-        
         {/* Add more routes here as needed */}
       </Routes>
-      <Footer />
+      {!shouldHideFooter && <Footer />}
+    </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
     </BrowserRouter>
   );
 }
